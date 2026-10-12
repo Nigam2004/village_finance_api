@@ -1,5 +1,5 @@
 import os
-from contextlib import asynccontextmanager
+# from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine,test_db
@@ -7,6 +7,8 @@ from app import models  # import models before create_all
 from app.routers import members, fund, loans, expenses, dashboard
 
 test_db()
+Base.metadata.create_all(bind=engine)
+
 # @asynccontextmanager
 # async def lifespan(app: FastAPI):
 #     Base.metadata.create_all(bind=engine)
@@ -28,6 +30,13 @@ app = FastAPI(
 #     allow_headers=["*"],
 # )
 
+
+app.include_router(members.router)
+app.include_router(fund.router)
+app.include_router(loans.router)
+app.include_router(expenses.router)
+app.include_router(dashboard.router)
+
 @app.get("/")
 def root():
     return {"message": "Village Finance Management API is running", "docs": "/docs"}
@@ -36,8 +45,3 @@ def root():
 def health():
     return {"status": "ok"}
 
-app.include_router(members.router)
-app.include_router(fund.router)
-app.include_router(loans.router)
-app.include_router(expenses.router)
-app.include_router(dashboard.router)

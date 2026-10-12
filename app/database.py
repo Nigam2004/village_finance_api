@@ -10,11 +10,11 @@ from sqlalchemy.orm import sessionmaker
 DATABASE_URL = "postgresql+psycopg://postgres:12345@localhost:5432/village_finance"
 
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,)
 print("Database connection created")
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine )
-
 
 Base=declarative_base()
 
