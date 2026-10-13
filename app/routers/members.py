@@ -10,13 +10,12 @@ router = APIRouter(prefix="/api/members", tags=["Members"])
 
 @router.post("", response_model=MemberOut, status_code=status.HTTP_201_CREATED)
 def create_member(payload: MemberCreate, db: Session = Depends(get_db)):
-    print("post_api calls")
     member = Member(**payload.model_dump())
-    print("member created")
     db.add(member)
+    db.flush()
+    member.account_number=f"MDR{member.id:04d}"
     db.commit()
     db.refresh(member)
-    print("member added")
     return member
 
 

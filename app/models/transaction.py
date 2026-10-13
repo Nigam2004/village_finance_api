@@ -2,7 +2,7 @@ from datetime import date
 from sqlalchemy import Date, DateTime, ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from app.models.member import Member
+# from app.models.member import Member
 
 
 class FundTransaction(Base):
@@ -16,4 +16,4 @@ class FundTransaction(Base):
     note: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[object] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    member: Mapped["Member"] = relationship(back_populates="transactions")
+    member: Mapped["Member"] = relationship("Member",back_populates="transactions")
