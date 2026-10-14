@@ -26,3 +26,4 @@ class Member(Base):
     "FundTransaction",
     back_populates="member"
     )
+    # ok
