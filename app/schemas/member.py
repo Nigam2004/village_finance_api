@@ -20,3 +20,4 @@ class MemberUpdate(BaseModel):
 class MemberOut(MemberCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    member_id:str

@@ -9,11 +9,12 @@ class FundTransaction(Base):
     __tablename__ = "fund_transactions"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    member_id: Mapped[int] = mapped_column(ForeignKey("members.id"), index=True)
+    member_id: Mapped[str] = mapped_column(ForeignKey("members.id"), index=True)
     transaction_type: Mapped[str] = mapped_column(String(20))  # deposit or repayment
-    amount: Mapped[float] = mapped_column()
+    tota_amount_paid: Mapped[float] = mapped_column()
+    principalPaid:Mapped[float] = mapped_column()
+    interestPaid:Mapped[float] = mapped_column()
     transaction_date: Mapped[date] = mapped_column(Date, default=date.today)
-    note: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[object] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     member: Mapped["Member"] = relationship("Member",back_populates="transactions")

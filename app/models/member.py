@@ -9,7 +9,7 @@ class Member(Base):
     __tablename__ = "members"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    account_number: Mapped[str | None] = mapped_column(String(30),unique=True,index=True,nullable=True
+    member_id: Mapped[str | None] = mapped_column(String(30),unique=True,index=True,nullable=True
     )
     name: Mapped[str] = mapped_column(String(120))
     father_name:Mapped[str] = mapped_column(String(120))

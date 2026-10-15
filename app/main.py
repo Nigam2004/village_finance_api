@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine,test_db
 from app import models  # import models before create_all
-from app.routers import members, fund, loans, expenses, dashboard
+from app.routers import members, fund, loans, expenses, dashboard,fund_contribution
 
 test_db()
 Base.metadata.create_all(bind=engine)
@@ -36,6 +36,7 @@ app.include_router(fund.router)
 app.include_router(loans.router)
 app.include_router(expenses.router)
 app.include_router(dashboard.router)
+app.include_router(fund_contribution.router)
 
 @app.get("/")
 def root():

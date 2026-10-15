@@ -4,11 +4,13 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class TransactionCreate(BaseModel):
-    member_id: int
+    member_id: str
     transaction_type: Literal["deposit", "repayment"]
-    amount: float = Field(gt=0)
+    principalPaid:float = Field(gt=0)
+    interestPaid:float = Field(gt=0)
+    tota_amount_paid: float = Field(gt=0)
     transaction_date: date = Field(default_factory=date.today)
-    note: str | None = Field(default=None, max_length=500)
+    
 
 
 class TransactionOut(TransactionCreate):
@@ -33,13 +35,13 @@ class LoanOut(BaseModel):
     principal: float
     annual_interest_rate: float
     duration_months: int
-    interest_method: str
+    interest_method: str=Field(default="simple")
     interest_amount: float
     total_amount: float
-    monthly_installment: float
     loan_date: date
     status: str
     note: str | None
+    transactions: list[TransactionOut] = []
 
 
 class ExpenseCreate(BaseModel):

@@ -18,21 +18,20 @@ def calculate_loan(principal: float, annual_rate: float, months: int, method: st
         interest = principal * (annual_rate / 100) * months
     total = principal + interest
     installment = total / months
-    return round(interest, 2), round(total, 2), round(installment, 2)
+    return round(interest, 2), round(total, 2)
 
 
 @router.post("", response_model=LoanOut, status_code=201)
 def create_loan(payload: LoanCreate, db: Session = Depends(get_db)):
     if not db.get(Member, payload.member_id):
         raise HTTPException(status_code=404, detail="Member not found")
-    interest, total, installment = calculate_loan(
+    interest, total = calculate_loan(
         payload.principal, payload.annual_interest_rate, payload.duration_months, payload.interest_method
     )
     loan = Loan(
         **payload.model_dump(),
         interest_amount=interest,
         total_amount=total,
-        monthly_installment=installment,
     )
     db.add(loan)
     db.commit()
