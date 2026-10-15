@@ -21,7 +21,6 @@ class MemberOut(MemberCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
     member_acc:str
-    # transactions:list[TransactionOut]
     loans:list[LoanOut]
     
 
