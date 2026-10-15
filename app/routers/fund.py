@@ -6,14 +6,18 @@ from app.models.member import Member
 from app.models.transaction import FundTransaction
 from app.schemas.finance import TransactionCreate, TransactionOut
 
-router = APIRouter(prefix="/api/fund", tags=["Community Fund"])
+router = APIRouter(prefix="/api/fund", tags=["transaction"])
 
 
 @router.post("/transactions", response_model=TransactionOut, status_code=201)
 def create_transaction(payload: TransactionCreate, db: Session = Depends(get_db)):
     if not db.get(Member, payload.member_id):
         raise HTTPException(status_code=404, detail="Member not found")
-    item = FundTransaction(**payload.model_dump())
+    data=payload.model_dump()
+    data["total_amount_paid"] = (
+    payload.principalPaid + payload.interestPaid
+)
+    item = FundTransaction(**data)
     db.add(item)
     db.commit()
     db.refresh(item)

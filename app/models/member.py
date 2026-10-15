@@ -9,7 +9,7 @@ class Member(Base):
     __tablename__ = "members"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    member_id: Mapped[str | None] = mapped_column(String(30),unique=True,index=True,nullable=True
+    member_acc: Mapped[str | None] = mapped_column(String(30),unique=True,index=True,nullable=True
     )
     name: Mapped[str] = mapped_column(String(120))
     father_name:Mapped[str] = mapped_column(String(120))
@@ -22,8 +22,4 @@ class Member(Base):
     "Loan",
     back_populates="member"
     )
-    transactions: Mapped[list["FundTransaction"]] = relationship(
-    "FundTransaction",
-    back_populates="member"
-    )
-    # ok
+   

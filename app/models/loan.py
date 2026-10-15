@@ -23,4 +23,8 @@ class Loan(Base):
     member: Mapped["Member"] = relationship(
     "Member",
     back_populates="loans"
-)
+    )
+    transaction: Mapped[list["FundTransaction"]] = relationship(
+        "FundTransaction",
+        back_populates="loans"
+        )
