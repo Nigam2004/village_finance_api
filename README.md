@@ -24,9 +24,13 @@ Edit `.env` and set your PostgreSQL password. Example:
 ```env
 DATABASE_URL=postgresql+psycopg://postgres:YOUR_PASSWORD@localhost:5432/village_finance
 FRONTEND_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+JWT_SECRET_KEY=<a randomly generated secret with at least 32 characters>
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
 If your password contains characters such as `@`, `:`, `/`, or `#`, URL-encode them.
+Generate a JWT secret with `py -c "import secrets; print(secrets.token_urlsafe(48))"` and
+use the output as `JWT_SECRET_KEY`. Do not commit the secret.
 
 ## 3. Run the API
 
@@ -44,6 +48,9 @@ Tables are created automatically on first startup. For production, use Alembic m
 
 | Method | Endpoint | Purpose |
 |---|---|---|
+| POST | `/api/admin/register` | Register an administrator |
+| POST | `/api/admin/login` | Log in and receive a JWT bearer token |
+| GET | `/api/admin/me` | Get the authenticated administrator profile |
 | GET | `/api/dashboard/summary` | Dashboard totals |
 | POST | `/api/members` | Register a member |
 | GET | `/api/members` | List/search members (`?search=name`) |
@@ -91,8 +98,10 @@ const members = await response.json();
 ```
 
 Use `http://127.0.0.1:8000/docs` to test endpoints interactively.
+Register an administrator, log in, then send the returned token as
+`Authorization: Bearer <access_token>` for all finance and dashboard endpoints.
 
 ## Important notes
 - This starter stores monetary values as floating-point columns for simplicity. For real financial records, switch to `NUMERIC(12, 2)` / Python `Decimal` before production.
-- This is a starter backend, not yet an accounting-grade ledger: fund balance reconciliation, repayment allocation between principal/interest, authentication, authorization, audit logs, backups, and Alembic migrations should be added before live use.
+- This is a starter backend, not yet an accounting-grade ledger: fund balance reconciliation, repayment allocation between principal/interest, authorization roles, audit logs, backups, and Alembic migrations should be added before live use.
 - `flat_monthly` is a flat-rate calculation, not reducing-balance interest. Confirm the community's agreed interest policy before using real loans.

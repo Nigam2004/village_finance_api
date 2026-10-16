@@ -1,10 +1,19 @@
 import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine,test_db
 from app import models  # import models before create_all
-from app.routers import members, fund, loans, expenses, dashboard,fund_contribution
+from app.routers import (
+    admin,
+    members,
+    fund,
+    loans,
+    expenses,
+    dashboard,
+    fund_contribution,
+)
+from app.security import get_current_admin
 
 test_db()
 Base.metadata.create_all(bind=engine)
@@ -31,12 +40,13 @@ app.add_middleware(
 )
 
 
-app.include_router(members.router)
-app.include_router(fund.router)
-app.include_router(loans.router)
-app.include_router(expenses.router)
-app.include_router(dashboard.router)
-app.include_router(fund_contribution.router)
+app.include_router(admin.router)
+app.include_router(members.router, dependencies=[Depends(get_current_admin)])
+app.include_router(fund.router, dependencies=[Depends(get_current_admin)])
+app.include_router(loans.router, dependencies=[Depends(get_current_admin)])
+app.include_router(expenses.router, dependencies=[Depends(get_current_admin)])
+app.include_router(dashboard.router, dependencies=[Depends(get_current_admin)])
+app.include_router(fund_contribution.router, dependencies=[Depends(get_current_admin)])
 
 @app.get("/")
 def root():
@@ -45,4 +55,3 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
