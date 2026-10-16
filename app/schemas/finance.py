@@ -7,9 +7,8 @@ class TransactionCreate(BaseModel):
     member_id: int
     loan_id:int
     transaction_type: Literal["deposit", "repayment"]
-    principalPaid:float = Field(gt=0)
-    interestPaid:float = Field(gt=0)
-    # total_amount_paid: float = Field(gt=0)
+    principalPaid:float = Field(ge=0)
+    interestPaid:float = Field(ge=0)
     transaction_date: date = Field(default_factory=date.today)
     
 
@@ -17,15 +16,15 @@ class TransactionCreate(BaseModel):
 class TransactionOut(TransactionCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    total_amount_paid: float = Field(gt=0)
+    total_amount_paid: float = Field(ge=0)
 
 
 class LoanCreate(BaseModel):
     member_id: int
     principal: float = Field(gt=0)
-    annual_interest_rate: float = Field(ge=0, le=1000)
-    duration_months: int = Field(gt=0, le=600)
-    interest_method: Literal["simple", "flat_monthly"] = "simple"
+    annual_interest_rate: float = Field(gt=0, le=1000)
+    duration_months: int = Field(gt=0, le=12)
+    interest_method: Literal["simple"] = "simple"
     loan_date: date = Field(default_factory=date.today)
     note: str | None = Field(default=None, max_length=500)
 

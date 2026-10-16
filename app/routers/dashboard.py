@@ -16,8 +16,8 @@ def dashboard_summary(db: Session = Depends(get_db)):
     total_principal = db.scalar(select(func.coalesce(func.sum(Loan.principal), 0))) or 0
     interest_expected = db.scalar(select(func.coalesce(func.sum(Loan.interest_amount), 0))) or 0
     expenses_total = db.scalar(select(func.coalesce(func.sum(Expense.amount), 0))) or 0
-    deposits = db.scalar(select(func.coalesce(func.sum(FundTransaction.amount), 0)).where(FundTransaction.transaction_type == "deposit")) or 0
-    repayments = db.scalar(select(func.coalesce(func.sum(FundTransaction.amount), 0)).where(FundTransaction.transaction_type == "repayment")) or 0
+    deposits = db.scalar(select(func.coalesce(func.sum(FundTransaction.total_amount_paid), 0)).where(FundTransaction.transaction_type == "deposit")) or 0
+    repayments = db.scalar(select(func.coalesce(func.sum(FundTransaction.total_amount_paid), 0)).where(FundTransaction.transaction_type == "diposite")) or 0
     loans_out = db.scalar(select(func.coalesce(func.sum(Loan.principal), 0)).where(Loan.status == "active")) or 0
     return {
         "total_members": member_count,

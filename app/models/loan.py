@@ -13,7 +13,7 @@ class Loan(Base):
     principal: Mapped[float] = mapped_column()
     annual_interest_rate: Mapped[float] = mapped_column(default=0)  # percent per year
     duration_months: Mapped[int] = mapped_column()
-    interest_method: Mapped[str] = mapped_column(String(20), default="simple")  # simple or flat_monthly
+    interest_method: Mapped[str] = mapped_column(String(20), default="simple")  # simple
     interest_amount: Mapped[float] = mapped_column()
     total_amount: Mapped[float] = mapped_column()
     loan_date: Mapped[date] = mapped_column(Date, default=date.today)
